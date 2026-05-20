@@ -6,7 +6,7 @@ const Header = () => {
 <header>
     
     <nav class="navbar navbar-dark bg-dark">
-    <a className='navbar-brand' text-center href='#'>Employee Management System</a>
+    <a className='navbar-brand' href='#'>Employee Management System</a>
 </nav>
 </header>
 
