@@ -13,10 +13,14 @@ export const ListEmployeeComponents = () => {
             console.log(error);
         })
     }, []) 
-
+    function updateEmployee(id) {
+        navigate(`/update-employee/${id}`);
+    }
     function addNewEmployee(){
         navigate("/add-employee");
     }
+
+
     return (
 
     <div className='container'>
@@ -30,6 +34,7 @@ export const ListEmployeeComponents = () => {
                 <th>Employee first Name</th>
                 <th>Employee last Name</th>
                 <th>Employee Email</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -40,6 +45,10 @@ export const ListEmployeeComponents = () => {
                             <td>{employee.firstName}</td>
                             <td>{employee.lastName}</td>
                             <td>{employee.email}</td>
+                            <td>
+                                <button className="btn btn-info mt-2 mb-2" onClick={() => updateEmployee(employee.id)}>Update</button>
+                                <button className="btn btn-danger ml-2" onClick={() => navigate(`/delete-employee/${employee.id}`)}>Delete</button>
+                            </td>
                         </tr>
                     ))
 
