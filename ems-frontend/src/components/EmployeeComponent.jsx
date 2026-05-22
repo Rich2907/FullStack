@@ -1,9 +1,9 @@
 import { create } from 'axios';
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState,useEffect } from 'react'
+import { useNavigate,useParams } from 'react-router-dom';
 import { createEmployee } from '../Services/EmployeeService';
-
-
+import { getEmployeeById } from '../Services/EmployeeService';
+import { updateEmployee } from '../Services/EmployeeService';
 
 const EmployeeComponent = () => {
   const [firstName, setFirstName] = useState('');
@@ -14,8 +14,18 @@ const EmployeeComponent = () => {
     lastName: " ",
     email: " "
   });
-
-
+ const { id } = useParams();
+ useEffect(() => {
+    if(id) {
+        getEmployeeById(id).then((response) => {
+            setFirstName(response.data.firstName);
+            setLastName(response.data.lastName);
+            setEmail(response.data.email);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+    }, [id])
   
   const navigate = useNavigate();
 
@@ -28,13 +38,22 @@ const EmployeeComponent = () => {
     else {
     const employee = { firstName, lastName, email };
     console.log(employee);
-    createEmployee(employee).then((response) => {
-      console.log(response.data);
-      navigate('/employees');
-    }).catch((error) => {
-      console.log(error);
+    
+    if(id) {
+        updateEmployee(employee, id).then((response) => {
+            console.log(response.data);
+            navigate('/employees');
+        }).catch((error) => {
+            console.log(error);
+        });
+    } else {
+        createEmployee(employee).then((response) => {
+            console.log(response.data);
+            navigate('/employees');
+        }).catch((error) => {
+            console.log(error);
     });     }
-}
+}}
 
   function validateForm() {
     let valid = true;
@@ -64,12 +83,18 @@ const EmployeeComponent = () => {
     setErrors(errorsCopy);
     return valid;
 }
+function PageTitle(){
+    if(id) {
+        return <h2 className='text-center'>Update Employee</h2>
+    } else {
+    return <h2 className='text-center'>Add Employee</h2>
+}}
 
   return (
     <div className='container mb-5' >
         <div className='row mt-5'>
             <div className='card col-md-6 offset-md-3 offset-md-3'>
-<h2 className='text-center'>Add Employee</h2>
+{PageTitle()}
 <div className='card-body'>
     <form >
         <div className='form-group mb-2'>
